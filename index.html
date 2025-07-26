@@ -1,281 +1,106 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ASLA GROUP - Cultivando Belleza y Vida</title>
-    <meta name="description" content="ASLA GROUP ofrece servicios de jardinería, vivero, control de plagas y asesoría especializada en Huacho, Lima - Perú. Soluciones verdes para espacios vivos." />
-    <meta name="keywords" content="jardinería, vivero, plantas, control de plagas, asesoría, paisajismo, surco, Lima, Perú, ASLA GROUP" />
-    <meta name="author" content="ASLA GROUP" />
-    <meta name="robots" content="index, follow" />
-    
-    <!-- Favicons -->
-    <link rel="icon" href="imagenes/favicon.png" type="image/png" sizes="32x32" />
-    <link rel="icon" href="imagenes/favicon.jpg" type="image/jpeg" sizes="32x32" />
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    
-    <!-- CSS Libraries -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* General Setup */
-        html { 
-            scroll-behavior: smooth; 
-        }
-        body {
-            padding-top: 72px; /* Ajusta por altura del navbar */
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>ASLA GROUP - Cultivando Belleza y Vida</title>
 
-        /* Loader Styles */
-        #loader {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        #loader img {
-            width: 150px;
-            animation: pulse-loader 1.5s infinite ease-in-out;
-        }
-        @keyframes pulse-loader {
-            0%, 100% { transform: scale(1); }
-            50%      { transform: scale(1.1); }
-        }
+  <!-- SEO -->
+  <meta name="description" content="ASLA GROUP brinda servicios de jardinería, vivero, control de plagas y asesoría especializada en Huacho, Lima - Perú. Cultivando belleza y vida en cada espacio verde.">
+  <meta name="keywords" content="jardinería, vivero, plantas, paisajismo, control de plagas, asesoría, diseño de jardines, Lima, Perú, ASLA GROUP, Huacho">
+  <meta name="author" content="ASLA GROUP">
+  <meta name="robots" content="index, follow" />
 
-        /* Navbar Styles */
-        #navbar {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%;
-            background: rgba(46, 139, 87, 0.95);
-            z-index: 1000;
-            transition: box-shadow 0.3s, background 0.3s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-        }
-        #navbar.show {
-            box-shadow: 0 4px 16px rgba(0,0,0,0.13);
-            background: rgba(46, 139, 87, 1);
-        }
-        #navbar .container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0.5em 2em;
-        }
-        .nav-logo {
-            height: 48px;
-            border-radius: 8px;
-        }
-        .nav-links {
-            list-style: none;
-            display: flex;
-            gap: 2em;
-            margin: 0;
-            padding: 0;
-        }
-        .nav-links li a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1em;
-            transition: color 0.2s;
-            position: relative;
-            padding-bottom: 5px;
-        }
-        .nav-links li a::after {
-            content: '';
-            position: absolute;
-            left: 0; bottom: 0;
-            width: 100%; height: 2px;
-            background: #54ea56;
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-            transform-origin: center;
-        }
-        .nav-links li a:hover::after,
-        .nav-links li a.active::after {
-            transform: scaleX(1);
-        }
-        .nav-links li a:hover,
-        .nav-links li a.active {
-            color: #54ea56;
-        }
+  <!-- Open Graph (para compartir en redes) -->
+  <meta property="og:title" content="ASLA GROUP - Cultivando Belleza y Vida">
+  <meta property="og:description" content="Soluciones verdes en jardinería, vivero y asesoría en Huacho, Lima - Perú.">
+  <meta property="og:image" content="https://aslagroup24.github.io/imagenes/og-image.jpg"> <!-- Cambia por una imagen real -->
+  <meta property="og:url" content="https://aslagroup24.github.io/">
+  <meta property="og:type" content="website">
 
-        /* Hero Section Styles */
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            overflow: hidden;
-        }
-        .hero::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: url('imagenes/portada.jpg') center/cover no-repeat;
-            z-index: 0;
-            opacity: 0.7;
-            background-color: #2e8b57;
-            transform: scale(1.1);
-        }
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-        }
-        .hero-content .logo,
-        .hero-content .hero-title,
-        .hero-content .btn-primary,
-        #typewriter-target {
-            visibility: hidden; /* Para animación */
-        }
+  <!-- Favicons -->
+  <link rel="icon" href="imagenes/favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="imagenes/favicon.png">
 
-        /* Service Grid: hasta 2 columnas */
-        .service-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-        .service-card {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-        }
-        .contenido-flexible {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin: 1rem 0;
-            flex-grow: 1;
-        }
-        .contenido-flexible ul {
-            flex: 1;
-            min-width: 150px;
-            padding-left: 20px;
-            margin: 0;
-        }
-        .contenido-flexible img {
-            flex-shrink: 0;
-            width: 120px;
-            height: 120px;
-            border-radius: 8px;
-            object-fit: cover;
-        }
+  <!-- Librerías CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-        /* Interactive Effects */
-        .image-hover-effect {
-            perspective: 1000px;
-            display: inline-block;
-        }
-        .image-hover-effect img {
-            transition: transform 0.6s cubic-bezier(0.23,1,0.32,1);
-            will-change: transform;
-        }
-        .btn:hover {
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
-        }
-        .animated-link {
-            position: relative;
-            color: #54ea56;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        .animated-link::after {
-            content: '';
-            position: absolute;
-            left: 0; bottom: -2px;
-            width: 100%; height: 2px;
-            background: #54ea56;
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-        .animated-link:hover {
-            color: #2e8b57;
-        }
-        .animated-link:hover::after {
-            transform: scaleX(1);
-        }
+  <!-- Estilos personalizados -->
+  <link rel="stylesheet" href="styles.css">
 
-        /* Footer Styles */
-        footer {
-            position: relative;
-            overflow: hidden;
-        }
-        .footer-background {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: #2e8b57;
-            transform: scaleY(0);
-            transform-origin: bottom;
-            z-index: -1;
-        }
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
 
-        /* Responsive */
-        @media (max-width: 700px) {
-            #navbar .container {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 0.5em 1em;
-            }
-            .nav-links {
-                flex-direction: column;
-                gap: 1em;
-                width: 100%;
-                padding-top: 0.5rem;
-            }
-            body {
-                padding-top: 150px;
-            }
-        }
-        @media (max-width: 480px) {
-            .contenido-flexible {
-                flex-direction: column;
-                text-align: center;
-            }
-            .contenido-flexible ul {
-                padding-left: 0;
-                list-style-position: inside;
-                margin-bottom: 1rem;
-            }
-        }
-    </style>
+    body {
+      margin: 0;
+      padding-top: 72px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7f6;
+      color: #333;
+    }
+
+    #titulo-principal {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-top: 40px;
+      color: #2c3e50;
+    }
+
+    @media screen and (max-width: 768px) {
+      #titulo-principal {
+        font-size: 2rem;
+        margin: 20px 10px;
+      }
+
+      body {
+        padding-top: 60px;
+      }
+    }
+  </style>
 </head>
+
+<body>
+  <!-- Encabezado principal -->
+  <h1 id="titulo-principal">Bienvenidos a ASLA GROUP</h1>
+
+  <!-- Librerías JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+
+  <script>
+    gsap.from("#titulo-principal", {
+      duration: 1.5,
+      y: -50,
+      opacity: 0,
+      ease: "bounce.out"
+    });
+  </script>
+</body>
+</html>
+
 <body>
     <!-- Loader -->
-    <div id="loader">
-        <img src="imagenes/logo.jpg" alt="Cargando ASLA GROUP...">
+    <div id="loader" class="loader">
+        <img src="imagenes/logo.jpg" alt="Cargando ASLA GROUP..." class="loader-logo">
     </div>
 
     <!-- Navbar -->
-    <nav id="navbar">
-        <div class="container">
-            <a href="#hero" style="display:flex;align-items:center;">
+    <header id="navbar" class="navbar">
+        <div class="container navbar-container">
+            <a href="#hero" class="navbar-brand">
                 <img src="imagenes/logo.jpg" alt="ASLA GROUP logo" class="nav-logo">
             </a>
             <ul class="nav-links">
                 <li><a href="#jardineria">Jardinería</a></li>
                 <li><a href="#vivero">Vivero</a></li>
-                <li><a href="#plagas">Control de Plagas</a></li>
+                <li><a href="#plagas">Plagas</a></li>
                 <li><a href="#asesoria">Asesoría</a></li>
                 <li><a href="#contacto">Contacto</a></li>
             </ul>
         </div>
-    </nav>
+    </header>
 
     <!-- Hero -->
     <section class="hero" id="hero">
@@ -288,385 +113,306 @@
     </section>
 
     <!-- Jardinería -->
-    <section id="jardineria" data-aos="fade-up">
+    <section id="jardineria" class="section" data-aos="fade-up">
         <h2 class="section-title">Servicios de Jardinería</h2>
         <div class="service-grid">
+            <!-- Tarjeta 1 -->
             <div class="service-card" data-aos="zoom-in-up">
                 <div class="service-icon">🌺</div>
                 <h3>Diseño de Jardines</h3>
-                <div class="contenido-flexible">
+                <div class="service-content">
                     <ul>
                         <li>Diseño y ejecución de jardines</li>
                         <li>Instalación de césped natural y sintético</li>
                         <li>Decoración con plantas y piedras</li>
                         <li>Sistemas de riego tecnificado</li>
                     </ul>
-                    <img src="imagenes/plantas.jpg" alt="Diseño de jardines">
+                    <img src="imagenes/plantas.jpg" alt="Diseño de jardines" class="service-image">
                 </div>
                 <a href="#contacto" class="btn">Solicita cotización</a>
             </div>
+
+            <!-- Tarjeta 2 -->
             <div class="service-card" data-aos="zoom-in-up" data-aos-delay="200">
                 <div class="service-icon">✂️</div>
                 <h3>Mantenimiento</h3>
-                <div class="contenido-flexible">
+                <div class="service-content">
                     <ul>
                         <li>Poda profesional</li>
                         <li>Abonado y fertilización</li>
                         <li>Limpieza y mantenimiento</li>
                         <li>Cuidado integral</li>
                     </ul>
-                    <img src="imagenes/poda.jpg" alt="Servicio de poda">
+                    <img src="imagenes/poda.jpg" alt="Servicio de poda" class="service-image">
                 </div>
                 <a href="#contacto" class="btn">Agenda servicio</a>
             </div>
         </div>
     </section>
-
-    <!-- Vivero -->
-    <section id="vivero" data-aos="fade-up">
-        <h2 class="section-title">Servicios de Vivero</h2>
-        <div class="service-grid">
-            <div class="service-card" data-aos="zoom-in-up">
-                <div class="service-icon">🌿</div>
-                <h3>Plantas y Árboles</h3>
-                <div class="contenido-flexible">
+<!-- Vivero -->
+<section id="vivero" class="seccion-servicio" data-aos="fade-up">
+    <h2 class="section-title">Servicios de Vivero</h2>
+    <div class="service-grid">
+        <div class="service-card" data-aos="zoom-in-up">
+            <div class="service-icon">🌿</div>
+            <h3>Plantas y Árboles</h3>
+            <div class="contenido-flexible">
+                <div class="text-content">
                     <ul>
                         <li>Plantas ornamentales y de interior</li>
                         <li>Árboles frutales y forestales</li>
                         <li>Especies nativas y exóticas</li>
                         <li>Plantas para todo clima</li>
                     </ul>
-                    <img src="imagenes/vivero.jpg" alt="Variedad de plantas">
+                    <a href="#contacto" class="btn">Visita nuestro vivero</a>
                 </div>
-                <a href="#contacto" class="btn">Visita nuestro vivero</a>
+                <div class="img-content">
+                    <img src="imagenes/vivero.jpg" alt="Variedad de plantas en nuestro vivero">
+                </div>
             </div>
-            <div class="service-card" data-aos="zoom-in-up" data-aos-delay="200">
-                <div class="service-icon">🏺</div>
-                <h3>Suministros</h3>
-                <div class="contenido-flexible">
+        </div>
+
+        <div class="service-card" data-aos="zoom-in-up" data-aos-delay="200">
+            <div class="service-icon">🏺</div>
+            <h3>Suministros</h3>
+            <div class="contenido-flexible">
+                <div class="text-content">
                     <ul>
                         <li>Sustratos y tierra abonada</li>
                         <li>Macetas y contenedores</li>
                         <li>Herramientas de jardinería</li>
                         <li>Fertilizantes y abonos</li>
                     </ul>
+                    <a href="#contacto" class="btn">Ver catálogo</a>
+                </div>
+                <div class="img-content">
                     <img src="imagenes/macetas.jpg" alt="Suministros de jardinería">
                 </div>
-                <a href="#contacto" class="btn">Ver catálogo</a>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Control de Plagas -->
-    <section id="plagas" data-aos="fade-up">
-      <h2 class="section-title">Control de Plagas</h2>
-      <div class="service-grid">
+<!-- Control de Plagas -->
+<section id="plagas" class="seccion-servicio" data-aos="fade-up">
+    <h2 class="section-title">Control de Plagas</h2>
+    <div class="service-grid">
         <div class="service-card" data-aos="zoom-in-up">
-          <div class="service-icon">🛡️</div>
-          <h3>Tratamientos</h3>
-          <div class="contenido-flexible">
-            <ul>
-              <li>Eliminación de plagas</li>
-              <li>Tratamientos preventivos</li>
-              <li>Productos seguros y eficaces</li>
-              <li>Diagnóstico técnico</li>
-            </ul>
-            <img src="imagenes/control de plaga.jpg" alt="Control de plagas" style="width:100px;">
-          </div>
-          <a href="#contacto" class="btn">Agenda visita</a>
+            <div class="service-icon">🛡️</div>
+            <h3>Tratamientos</h3>
+            <div class="contenido-flexible">
+                <div class="text-content">
+                    <ul>
+                        <li>Eliminación de plagas</li>
+                        <li>Tratamientos preventivos</li>
+                        <li>Productos seguros y eficaces</li>
+                        <li>Diagnóstico técnico</li>
+                    </ul>
+                    <a href="#contacto" class="btn">Agenda visita</a>
+                </div>
+                <div class="img-content">
+                    <img src="imagenes/control de plaga.jpg" alt="Eliminación de plagas">
+                </div>
+            </div>
         </div>
+
         <div class="service-card" data-aos="zoom-in-up" data-aos-delay="200">
-          <div class="service-icon">🔍</div>
-          <h3>Inspección</h3>
-          <div class="contenido-flexible">
-            <ul>
-              <li>Revisión de puntos críticos</li>
-             <li>Informe detallado</li>
-              <li>Plan de acción personalizado</li>
-              <li>Seguimiento post-tratamiento</li>
-            </ul>
-            <img src="imagenes/inspecion.jpg" alt="Inspección de plagas" style="width:100px;">
-          </div>
-          <a href="#contacto" class="btn">Solicita inspección</a>
+            <div class="service-icon">🔍</div>
+            <h3>Inspección</h3>
+            <div class="contenido-flexible">
+                <div class="text-content">
+                    <ul>
+                        <li>Revisión de puntos críticos</li>
+                        <li>Informe detallado</li>
+                        <li>Plan de acción personalizado</li>
+                        <li>Seguimiento post-tratamiento</li>
+                    </ul>
+                    <a href="#contacto" class="btn">Solicita inspección</a>
+                </div>
+                <div class="img-content">
+                    <img src="imagenes/inspecion.jpg" alt="Inspección profesional de plagas">
+                </div>
+            </div>
         </div>
-      </div>
-    </section>
+    </div>
+</section>
+<!-- Asesoría -->
+<section id="asesoria" data-aos="fade-up">
+  <div class="container">
+    <h2 class="section-title">Asesoría Especializada</h2>
+    <div class="service-grid">
 
-    <!-- Asesoría -->
-    <section id="asesoria" data-aos="fade-up">
-      <h2 class="section-title">Asesoría Especializada</h2>
-      <div class="service-grid">
-        <div class="service-card" data-aos="zoom-in-up">
-          <div class="service-icon">🎓</div>
+      <article class="service-card" data-aos="zoom-in-up">
+        <div class="service-icon" aria-hidden="true">🎓</div>
+        <header>
           <h3>Consultoría</h3>
-          <div class="contenido-flexible">
-            <ul>
-              <li>Diagnóstico de suelos</li>
-              <li>Planes de fertilización</li>
-              <li>Diseño paisajístico</li>
-              <li>Capacitación técnica</li>
-            </ul>
-            <img src="imagenes/asesoriapincipal.jpg" alt="Asesoría técnica de jardinería" style="width:120px;">
-          </div>
-          <a href="#contacto" class="btn">Consulta ahora</a>
+        </header>
+        <div class="contenido-flexible">
+          <ul>
+            <li>Diagnóstico de suelos</li>
+            <li>Planes de fertilización</li>
+            <li>Diseño paisajístico</li>
+            <li>Capacitación técnica</li>
+          </ul>
+          <figure>
+            <img src="imagenes/asesoriapincipal.jpg" alt="Asesoría técnica de jardinería" width="120">
+          </figure>
         </div>
-        <div class="service-card" data-aos="zoom-in-up" data-aos-delay="200">
-          <div class="service-icon">📋</div>
+        <a href="#contacto" class="btn" aria-label="Consulta sobre asesoría técnica">Consulta ahora</a>
+      </article>
+
+      <article class="service-card" data-aos="zoom-in-up" data-aos-delay="200">
+        <div class="service-icon" aria-hidden="true">📋</div>
+        <header>
           <h3>Planes a Medida</h3>
-          <div class="contenido-flexible">
-            <ul>
-              <li>Estudios de viabilidad</li>
-              <li>Propuestas de diseño</li>
-              <li>Costos y presupuestos</li>
-              <li>Asesoría continua</li>
-            </ul>
-            <img src="imagenes/paisajes.jpg" alt="Planes de paisajismo" style="width:100px;">
-          </div>
-          <a href="#contacto" class="btn">Solicita Plan</a>
+        </header>
+        <div class="contenido-flexible">
+          <ul>
+            <li>Estudios de viabilidad</li>
+            <li>Propuestas de diseño</li>
+            <li>Costos y presupuestos</li>
+            <li>Asesoría continua</li>
+          </ul>
+          <figure>
+            <img src="imagenes/paisajes.jpg" alt="Planes personalizados de paisajismo" width="100">
+          </figure>
         </div>
-      </div>
-    </section>
+        <a href="#contacto" class="btn" aria-label="Solicita un plan personalizado">Solicita Plan</a>
+      </article>
 
-    <!-- Galería -->
-    <section class="gallery" data-aos="fade-up">
-      <h2 class="section-title">Nuestros Trabajos</h2>
-      <div class="gallery-grid">
-        <div class="gallery-item" data-aos="zoom-in"><div class="image-hover-effect"><img src="imagenes/jardin.jpg" alt="Jardín diseñado"></div></div>
-        <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100"><div class="image-hover-effect"><img src="imagenes/vivero.jpg" alt="Plantas del vivero"></div></div>
-        <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200"><div class="image-hover-effect"><img src="imagenes/planta frutal.jpg" alt="Mantenimiento"></div></div>
-        <div class="gallery-item" data-aos="zoom-in"><div class="image-hover-effect"><img src="imagenes/riego.jpg" alt="Sistema de riego"></div></div>
-        <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100"><div class="image-hover-effect"><img src="imagenes/plantin de fresa.jpg" alt="Árboles frutales"></div></div>
-        <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200"><div class="image-hover-effect"><img src="imagenes/control de plaga.jpg" alt="Control de plagas"></div></div>
-        <div class="gallery-item" data-aos="zoom-in"><div class="image-hover-effect"><img src="imagenes/jardines.jpg" alt="Jardines con arbustos"></div></div>
-        <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100"><div class="image-hover-effect"><img src="imagenes/plantas.jpg" alt="Plantas ornamentales"></div></div>
-        <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200"><div class="image-hover-effect"><img src="imagenes/asesoriapincipal.jpg" alt="Asesoría técnica"></div></div>
-        <div class="gallery-item" data-aos="zoom-in"><div class="image-hover-effect"><img src="imagenes/inspecion.jpg" alt="Asesoría técnica"></div></div>
-        <div class="gallery-item" data-aos="zoom-in"><div class="image-hover-effect"><img src="imagenes/macetas.jpg" alt="Plantas ornamentales">
-      </div>
-    </section>
+    </div>
+  </div>
+</section>
+<!-- Galería -->
+<section id="galeria" class="gallery" data-aos="fade-up">
+  <div class="container">
+    <h2 class="section-title">Nuestros Trabajos</h2>
+    <div class="gallery-grid">
 
-    <!-- Pie de página -->
-    <footer>
-      <!-- contenido de footer -->
-    </footer>
-
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-      AOS.init();
-      window.addEventListener('scroll', () => {
-        document.getElementById('navbar').classList.toggle('show', window.scrollY > 50);
-      });
-      // Loader
-      window.addEventListener('load', () => {
-        document.getElementById('loader').style.display = 'none';
-        // Aquí tu animación de intro
-      });
-    </script>
-</body>
-</html>
-
-    <!-- Contact Section -->
-    <section id="contacto" class="contact" data-aos="fade-up">
-        <h2 class="section-title" style="color: rgb(36, 39, 36);">Contactanos</h2>
-        <div class="contact-info" style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center;">
-            <div class="contact-item" style="min-width:220px;" data-aos="fade-right">
-                <h3>📍Ubicación</h3>
-                <p>surco, Lima - Perú</p>
-            </div>
-            <div class="contact-item" style="min-width:220px;" data-aos="fade-up">
-                <h3>📱 Teléfono</h3>
-                <p style="font-size: 1.1em;">967 328 938</p>
-            </div>
-            <div class="contact-item" style="min-width:220px;" data-aos="fade-left">
-                <h3>🌐 Redes Sociales</h3>
-                <p style="display: flex; flex-direction: column; gap: 1em; align-items: flex-start;">
-                    <a href="https://wa.me/message/TTUMFL67I7WAB1" class="animated-link" target="_blank" title="WhatsApp"><img src="imagenes/whatsapp.gif" alt="WhatsApp" style="height: 3em; vertical-align: middle; margin-right: 0.3em;">WhatsApp</a>
-                    <a href="https://www.instagram.com/jardineria.asla.group?igsh=dHhiMnl5czB0Ync4" class="animated-link" target="_blank" title="Instagram"><img src="imagenes/INSTAGRAM.gif" alt="Instagram" style="height: 3em; vertical-align: middle; margin-right: 0.3em;">Instagram</a>
-                    <a href="https://www.facebook.com/profile.php?id=61553703977518&mibextid=ZbWKwL" class="animated-link" target="_blank" title="Facebook"><img src="imagenes/facebook logo.gif" alt="Facebook" style="height: 3em; vertical-align: middle; margin-right: 0.3em;">Facebook</a>
-                </p>
-            </div>
+      <figure class="gallery-item" data-aos="zoom-in">
+        <div class="image-hover-effect">
+          <img src="imagenes/jardin.jpg" alt="Jardín diseñado con flores y césped natural">
         </div>
-    </section>
+      </figure>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-background"></div>
-        <p>&copy; 2025 ASLA GROUP. Todos los derechos reservados.</p>
-        <p>diseñado y desarollado por <a href ="https://www.facebook.com/share/1BigM7SxZQ/"target=_blank>cristian</a></p>
-    </footer>
+      <figure class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
+        <div class="image-hover-effect">
+          <img src="imagenes/vivero.jpg" alt="Plantas del vivero en macetas">
+        </div>
+      </figure>
 
-    <!-- JavaScript Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+      <figure class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
+        <div class="image-hover-effect">
+          <img src="imagenes/planta frutal.jpg" alt="Mantenimiento de plantas frutales">
+        </div>
+      </figure>
 
-    <!-- Custom JavaScript -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
+      <figure class="gallery-item" data-aos="zoom-in">
+        <div class="image-hover-effect">
+          <img src="imagenes/riego.jpg" alt="Sistema de riego automatizado">
+        </div>
+      </figure>
 
-            // Register GSAP plugins
-            gsap.registerPlugin(ScrollTrigger);
+      <figure class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
+        <div class="image-hover-effect">
+          <img src="imagenes/plantin de fresa.jpg" alt="Plantines de fresa en desarrollo">
+        </div>
+      </figure>
 
-            /**
-             * 1. Navbar Active Link & Scroll Effect
-             */
-            const nav = document.getElementById('navbar');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 100) {
-                    nav.classList.add('show');
-                } else {
-                    nav.classList.remove('show');
-                }
-            });
+      <figure class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
+        <div class="image-hover-effect">
+          <img src="imagenes/control de plaga.jpg" alt="Aplicación de control de plagas en cultivo">
+        </div>
+      </figure>
 
-            const links = document.querySelectorAll('.nav-links a');
-            const sections = document.querySelectorAll('section');
-            
-            function setActiveLink() {
-                let current = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    if (pageYOffset >= sectionTop - 80) { // 80 is navbar height + offset
-                        current = section.getAttribute('id');
-                    }
-                });
+      <figure class="gallery-item" data-aos="zoom-in">
+        <div class="image-hover-effect">
+          <img src="imagenes/jardines.jpg" alt="Diseño de jardines con arbustos y flores">
+        </div>
+      </figure>
 
-                links.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href').includes(current)) {
-                        link.classList.add('active');
-                    }
-                });
-            }
-            window.addEventListener('scroll', setActiveLink);
-            setActiveLink(); // Set active link on load
+      <figure class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
+        <div class="image-hover-effect">
+          <img src="imagenes/plantas.jpg" alt="Plantas ornamentales en exhibición">
+        </div>
+      </figure>
 
-            /**
-             * 2. Loader and Intro Animation
-             */
-            function initLoaderAndIntro() {
-                const introTimeline = gsap.timeline({
-                    onComplete: () => {
-                        const typewriterElement = document.querySelector('#typewriter-target');
-                        if (typewriterElement) {
-                            const text = "Soluciones verdes para espacios vivos";
-                            typewriterEffect(typewriterElement, text, 75);
-                        }
-                    }
-                });
+      <figure class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
+        <div class="image-hover-effect">
+          <img src="imagenes/asesoriapincipal.jpg" alt="Sesión de asesoría técnica en campo">
+        </div>
+      </figure>
 
-                introTimeline.to('#loader', { duration: 1.2, opacity: 0, ease: 'power2.inOut', onComplete: () => { document.querySelector('#loader').style.display = 'none'; } });
-                introTimeline.from('.hero-content .logo', { duration: 1, y: -80, opacity: 0, ease: 'power3.out' }, "-=0.5");
-                introTimeline.from('.hero-content .hero-title', { duration: 1.2, y: -50, opacity: 0, ease: 'power3.out' }, "-=0.8");
-                introTimeline.from('#typewriter-target', { duration: 1, y: 20, opacity: 0, ease: 'power2.out' }, "-=0.8");
-                introTimeline.from('.hero-content .btn-primary', { duration: 1, y: 50, opacity: 0, ease: 'back.out(1.7)' }, "-=0.9");
-                introTimeline.from('.nav-logo', { duration: 0.8, y: -30, opacity: 0, ease: 'power2.out' }, "-=0.5");
-                introTimeline.from('.nav-links li', { duration: 0.6, y: -30, opacity: 0, stagger: 0.15, ease: 'power2.out' }, "-=0.4");
-            }
+      <figure class="gallery-item" data-aos="zoom-in">
+        <div class="image-hover-effect">
+          <img src="imagenes/inspecion.jpg" alt="Inspección técnica en áreas verdes">
+        </div>
+      </figure>
 
-            /**
-             * 3. Initialize AOS (Animate On Scroll)
-             */
-            function initAOS() {
-                AOS.init({
-                    duration: 800,
-                    easing: 'ease-in-out-quad',
-                    once: false,
-                    mirror: true,
-                });
-            }
+      <figure class="gallery-item" data-aos="zoom-in">
+        <div class="image-hover-effect">
+          <img src="imagenes/macetas.jpg" alt="Macetas decorativas con plantas">
+        </div>
+      </figure>
 
-            /**
-             * 4. GSAP ScrollTrigger Animations
-             */
-            function initScrollTriggers() {
-                gsap.to('.hero::before', {
-                    scale: 1,
-                    scrollTrigger: {
-                        trigger: '.hero',
-                        start: 'top top',
-                        end: 'bottom top',
-                        scrub: true,
-                    }
-                });
+    </div>
+  </div>
+</section>
+<!-- Contacto -->
+<section id="contacto" class="contact" data-aos="fade-up">
+  <h2 class="section-title">Contáctanos</h2>
+  <div class="contact-container">
+    
+    <div class="contact-item" data-aos="fade-right">
+      <h3>📍 Ubicación</h3>
+      <p>Surco, Lima - Perú</p>
+    </div>
 
-                document.querySelectorAll('.service-icon').forEach(icon => {
-                    gsap.from(icon, {
-                        scrollTrigger: {
-                            trigger: icon,
-                            start: 'top 85%',
-                            toggleActions: 'play none none reverse'
-                        },
-                        rotationZ: -180,
-                        scale: 0.5,
-                        opacity: 0,
-                        duration: 1,
-                        ease: 'back.out(1.4)'
-                    });
-                });
+    <div class="contact-item" data-aos="fade-up">
+      <h3>📞 Teléfono</h3>
+      <p><a href="tel:+51967328938" class="phone-link">967 328 938</a></p>
+    </div>
 
-                gsap.to('.footer-background', {
-                    scaleY: 1,
-                    scrollTrigger: {
-                        trigger: 'footer',
-                        start: 'top 90%',
-                        end: 'bottom bottom',
-                        scrub: true,
-                    }
-                });
-            }
+    <div class="contact-item" data-aos="fade-left">
+      <h3>🌐 Redes Sociales</h3>
+      <ul class="social-links">
+        <li>
+          <a href="https://wa.me/message/TTUMFL67I7WAB1" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <img src="imagenes/whatsapp.gif" alt="WhatsApp" class="icon"> WhatsApp
+          </a>
+        </li>
+        <li>
+          <a href="https://www.instagram.com/jardineria.asla.group?igsh=dHhiMnl5czB0Ync4" target="_blank" rel="noopener" aria-label="Instagram">
+            <img src="imagenes/INSTAGRAM.gif" alt="Instagram" class="icon"> Instagram
+          </a>
+        </li>
+        <li>
+          <a href="https://www.facebook.com/profile.php?id=61553703977518&mibextid=ZbWKwL" target="_blank" rel="noopener" aria-label="Facebook">
+            <img src="imagenes/facebook logo.gif" alt="Facebook" class="icon"> Facebook
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-            /**
-             * 5. Interactive Effects (Buttons & Images)
-             */
-            function initInteractiveEffects() {
-                const primaryButton = document.querySelector('.btn-primary');
-                if (primaryButton) {
-                    setInterval(() => {
-                        gsap.to(primaryButton, { scale: 1.05, duration: 0.3, yoyo: true, repeat: 1, ease: 'power1.inOut' });
-                    }, 5000);
-                }
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-content">
+    <p>&copy; 2025 <strong>ASLA GROUP</strong>. Todos los derechos reservados.</p>
+    <p>Diseñado y desarrollado por 
+      <a href="https://www.facebook.com/share/1BigM7SxZQ/" target="_blank" rel="noopener noreferrer">Cristian</a>
+    </p>
+  </div>
+</footer>
 
-                document.querySelectorAll('.image-hover-effect').forEach(container => {
-                    const image = container.querySelector('img');
-                    container.addEventListener('mousemove', (e) => {
-                        const { left, top, width, height } = container.getBoundingClientRect();
-                        const x = e.clientX - left - width / 2;
-                        const y = e.clientY - top - height / 2;
-                        const rotateX = -y / height * 15;
-                        const rotateY = x / width * 15;
-                        gsap.to(image, { duration: 0.7, rotationX: rotateX, rotationY: rotateY, scale: 1.08, ease: 'power2.out' });
-                    });
-                    container.addEventListener('mouseleave', () => {
-                        gsap.to(image, { duration: 0.7, rotationX: 0, rotationY: 0, scale: 1, ease: 'elastic.out(1, 0.5)' });
-                    });
-                });
-            }
+<!-- Librerías JS Externas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
 
-            /**
-             * 6. Typewriter Effect
-             */
-            function typewriterEffect(element, text, speed = 75) {
-                let i = 0;
-                element.textContent = "";
-                element.style.visibility = 'visible';
-                function type() {
-                    if (i < text.length) {
-                        element.textContent += text.charAt(i);
-                        i++;
-                        setTimeout(type, speed);
-                    }
-                }
-                type();
-            }
+<!-- JavaScript Personalizado -->
+<script src="script.js" defer></script>
 
-            // --- Execute All Functions ---
-            initLoaderAndIntro();
-            initAOS();
-            initScrollTriggers();
-            initInteractiveEffects();
-        });
-    </script>
 </body>
 </html>
