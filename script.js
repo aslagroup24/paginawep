@@ -1086,6 +1086,17 @@ window.ASLA = {
   validateForm,
   initTypewriter
 };
+// Mostrar la barra de navegación al cargar
+document.addEventListener("DOMContentLoaded", () => {
+  const navbar = document.querySelector(".nav");
+  if (navbar) navbar.classList.add("show");
+});
+
+// Ocultar el loader al cargar completamente la página
+window.addEventListener("load", () => {
+  const loader = document.getElementById("loader");
+  if (loader) loader.style.display = "none";
+});
 
 console.log('🌿 ASLA GROUP - Script cargado exitosamente');
 console.log('🚀 Animaciones profesionales inicializadas');
