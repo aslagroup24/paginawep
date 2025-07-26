@@ -752,159 +752,117 @@ function initSmoothScroll() {
     });
   });
 }
+// Se espera a que todo el contenido de la página (DOM) esté cargado antes de ejecutar el script.
+// Esta es una buena práctica para evitar errores.
+document.addEventListener('DOMContentLoaded', () => {
 
-
-// ====================================
-// 9. BOTÓN "VOLVER ARRIBA"
-// ====================================
-
-function initScrollToTop() {
-  // Crear botón si no existe
-  if (!document.querySelector('.scroll-to-top')) {
-    const scrollBtn = document.createElement('button');
-    scrollBtn.className = 'scroll-to-top';
-    scrollBtn.innerHTML = '↑';
-    scrollBtn.setAttribute('aria-label', 'Volver arriba');
-    document.body.appendChild(scrollBtn);
-
-    // Inyectar estilos CSS
-    const style = document.createElement('style');
-    style.textContent = `
-      .scroll-to-top {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        width: 50px;
-        height: 50px;
-        background: rgba(76, 175, 80, 0.9);
-        background: linear-gradient(135deg, #43e97b, #38f9d7);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        font-size: 1.5rem;
-        font-weight: bold;
-        cursor: pointer;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        z-index: 999;
-        opacity: 0;
-        pointer-events: none;
-        transform: scale(0.8);
-        transition: all 0.3s ease;
-      }
-
-      .scroll-to-top.show {
-        opacity: 1;
-        pointer-events: auto;
-        transform: scale(1);
-      }
-
-      .scroll-to-top:hover {
-        transform: scale(1.1);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-      }
-    `;
-    document.head.appendChild(style);
-
-    // Mostrar u ocultar el botón según el scroll
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 300) {
-        scrollBtn.classList.add('show');
-      } else {
-        scrollBtn.classList.remove('show');
-      }
-    });
-
-    // Acción al hacer clic
-    scrollBtn.addEventListener('click', () => {
-      gsap.to(window, {
-        duration: 1,
-        scrollTo: { y: 0 },
-        ease: 'power2.inOut'
-      });
-    });
-  }
-}
-
-const btnStyles = `
-  #scroll-btn {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background-color: #4CAF50;
-    color: white;
-    padding: 12px 16px;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 18px;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    transition: background-color 0.3s ease;
-  }
-
-  #scroll-btn:hover {
-    background-color: #388E3C;
-  }
-`;
-
-if (!document.querySelector('#scroll-btn-styles')) {
-  const style = document.createElement('style');
-  style.id = 'scroll-btn-styles';
-  style.textContent = btnStyles;
-  document.head.appendChild(style);
-}
-
-  const scrollBtn = document.querySelector('.scroll-to-top');
-  
-  // Mostrar/ocultar botón según scroll
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 500) {
-      scrollBtn.classList.add('show');
-    } else {
-      scrollBtn.classList.remove('show');
-    }
-  });
-  
-  // Funcionalidad del botón
-  scrollBtn.addEventListener('click', () => {
-    gsap.to(window, {
-      duration: 1,
-      scrollTo: 0,
-      ease: 'power2.inOut'
-    });
-  });
-// ====================================
-// 10. Inicialización de AOS (Animate On Scroll)
-// ====================================
-function initAOS(config = {}) {
-  if (typeof AOS !== 'undefined') {
-    // Inicializar AOS con configuración personalizada o por defecto
-    AOS.init(config);
-  } else if ('IntersectionObserver' in window) {
-    // Fallback usando IntersectionObserver para animaciones scroll
-
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('aos-animate');
-          obs.unobserve(entry.target); // Deja de observar el elemento
+    // =================================================================
+    // FUNCIÓN PARA EL BOTÓN "VOLVER ARRIBA"
+    // Se encarga de crear, estilizar y dar funcionalidad al botón.
+    // =================================================================
+    function initScrollToTop() {
+        // Si el botón ya existe en la página, no hacemos nada más para evitar duplicados.
+        if (document.querySelector('.scroll-to-top')) {
+            return;
         }
-      });
-    }, observerOptions);
 
-    // Observar todos los elementos con atributo data-aos
-    document.querySelectorAll('[data-aos]').forEach(el => {
-      observer.observe(el);
+        // 1. Crear el elemento del botón en memoria.
+        const scrollBtn = document.createElement('button');
+        scrollBtn.className = 'scroll-to-top';
+        scrollBtn.innerHTML = '↑'; // Símbolo de la flecha hacia arriba.
+        scrollBtn.setAttribute('aria-label', 'Volver arriba');
+        
+        // 2. Añadir el botón al cuerpo del documento HTML.
+        document.body.appendChild(scrollBtn);
+
+        // 3. Crear y añadir los estilos CSS para el botón directamente en el <head>.
+        // Esto evita tener que modificar tu archivo style.css y mantiene el componente autocontenido.
+        const style = document.createElement('style');
+        style.textContent = `
+          .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #43e97b, #38f9d7); /* Gradiente verde atractivo */
+            color: white;
+            border: none;
+            border-radius: 50%; /* Círculo perfecto */
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            opacity: 0; /* Inicialmente invisible */
+            pointer-events: none; /* No se puede hacer clic cuando está invisible */
+            transform: scale(0.8); /* Efecto de escala inicial */
+            transition: all 0.3s ease; /* Transición suave para todos los cambios */
+          }
+
+          .scroll-to-top.show {
+            opacity: 1; /* Hacer visible */
+            pointer-events: auto; /* Permitir clics */
+            transform: scale(1); /* Tamaño normal */
+          }
+
+          .scroll-to-top:hover {
+            transform: scale(1.1); /* Agrandar al pasar el mouse */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
+          }
+        `;
+        document.head.appendChild(style);
+
+        // 4. Lógica para mostrar y ocultar el botón.
+        window.addEventListener('scroll', () => {
+            // Si el usuario ha bajado más de 300 píxeles, muestra el botón.
+            if (window.scrollY > 300) {
+                scrollBtn.classList.add('show');
+            } else {
+                scrollBtn.classList.remove('show');
+            }
+        });
+
+        // 5. Acción que ocurre al hacer clic en el botón.
+        scrollBtn.addEventListener('click', () => {
+            // Usamos el método nativo del navegador para un scroll suave hacia la parte superior.
+            // Es más eficiente y no requiere plugins adicionales.
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // =================================================================
+    // FUNCIÓN PARA INICIALIZAR AOS (ANIMATE ON SCROLL)
+    // Con un fallback por si la librería no carga.
+    // =================================================================
+    function initAOS(config = {}) {
+        // Comprueba si la librería AOS está disponible en el objeto window.
+        if (typeof AOS !== 'undefined') {
+            AOS.init(config); // Si está, la inicializa con la configuración dada.
+        } else {
+            // Si AOS no está, muestra una advertencia en la consola del navegador.
+            console.warn('La librería AOS no se ha cargado. Las animaciones de scroll no funcionarán.');
+        }
+    }
+
+
+    // =================================================================
+    // INICIALIZACIÓN DE TODAS LAS FUNCIONES
+    // Aquí se "llaman" a las funciones para que se ejecuten.
+    // =================================================================
+    
+    initScrollToTop();
+
+    initAOS({
+        duration: 800,   // Duración de la animación en milisegundos.
+        once: true,      // La animación solo ocurre una vez por elemento.
+        offset: 100,     // La animación se dispara 100px antes de que el elemento sea visible.
     });
-  } else {
-    console.warn('AOS no está disponible y IntersectionObserver no es soportado.');
-  }
-}
+
+});
 
 // ====================================
 // 11. Optimización para dispositivos móviles
