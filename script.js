@@ -14,8 +14,7 @@ const aosConfig = {
 // Variables globales
 let isLoading = true;
 let scrollPosition = 0;
- lastScrollTop = 0;
-
+let lastScrollTop = 0; // declaración (solo una vez)
 // ====================================
 // 2. LOADER INICIAL CON LOGO ASLA GROUP
 // ====================================
@@ -678,7 +677,8 @@ function initImageEffects() {
 // 8. NAVEGACIÓN INTELIGENTE MEJORADA
 // ====================================
 
-let lastScrollTop = 0;
+// ...más adelante
+lastScrollTop = 100; // reasignación ✔️
 let isNavbarHidden = false;
 
 function initNavigation() {
@@ -1086,17 +1086,14 @@ window.ASLA = {
   validateForm,
   initTypewriter
 };
-// Mostrar la barra de navegación al cargar
 document.addEventListener("DOMContentLoaded", () => {
-  const navbar = document.querySelector(".nav");
-  if (navbar) navbar.classList.add("show");
-});
+  const navbar = document.querySelector(".navbar");
+  if (navbar) {
+    navbar.classList.add("show"); // Puedes definir .show en CSS para animaciones
+  } else {
+    console.warn("❗ No se encontró el elemento con clase .navbar");
+  }
 
-// Ocultar el loader al cargar completamente la página
-window.addEventListener("load", () => {
-  const loader = document.getElementById("loader");
-  if (loader) loader.style.display = "none";
+  console.log("🌿 ASLA GROUP - Script cargado exitosamente");
+  console.log("🚀 Animaciones profesionales inicializadas");
 });
-
-console.log('🌿 ASLA GROUP - Script cargado exitosamente');
-console.log('🚀 Animaciones profesionales inicializadas');
