@@ -825,14 +825,35 @@ function initScrollToTop() {
   }
 }
 
-    if (!document.querySelector('#scroll-btn-styles')) {
-      const style = document.createElement('style');
-      style.id = 'scroll-btn-styles';
-      style.textContent = btnStyles;
-      document.head.appendChild(style);
-    }
-  
-  
+const btnStyles = `
+  #scroll-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    transition: background-color 0.3s ease;
+  }
+
+  #scroll-btn:hover {
+    background-color: #388E3C;
+  }
+`;
+
+if (!document.querySelector('#scroll-btn-styles')) {
+  const style = document.createElement('style');
+  style.id = 'scroll-btn-styles';
+  style.textContent = btnStyles;
+  document.head.appendChild(style);
+}
+
   const scrollBtn = document.querySelector('.scroll-to-top');
   
   // Mostrar/ocultar botón según scroll
