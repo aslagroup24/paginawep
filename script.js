@@ -1,4 +1,3 @@
-
 // Timeline principal de GSAP
 let tl = gsap.timeline();
 
