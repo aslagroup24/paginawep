@@ -767,3 +767,49 @@ img {
   width: 100%;
   max-width: 600px; /* Ajusta este valor según tu diseño */
 }
+/* ============================================
+   ESTILOS PARA NAVBAR FIJA Y VISUAL
+   ============================================ */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 999;
+  padding: 0.5rem 0;
+  transition: all 0.3s ease;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.2rem;
+}
+
+.nav-links li a {
+  color: #222;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+  color: var(--primary-color);
+}
+
+.nav-logo {
+  width: 60px;
+  height: auto;
+  border-radius: 8px;
+}
