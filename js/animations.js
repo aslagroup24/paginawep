@@ -1,557 +1,192 @@
-/* ===================================
-   ASLA GROUP - ANIMATIONS
-   Author: Cristian Quispe Lucas
-   Description: GSAP animations and scroll effects
-   =================================== */
+/* ==========================================================================
+   ASLA GROUP - ANIMATION ENGINE (LIQUID GLASS PHYSICS)
+   Author: Cristian Quispe Lucas (Optimized by AI)
+   Tech: GSAP 3 + ScrollTrigger + QuickTo
+   ========================================================================== */
 
-// Wait for GSAP to load
 document.addEventListener('DOMContentLoaded', () => {
-  // Check if GSAP is loaded
-  if (typeof gsap === 'undefined') {
-    console.warn('GSAP not loaded. Animations will not work.');
+  'use strict';
+
+  // 1. Safety Check
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+    console.warn('⚠️ GSAP Core or ScrollTrigger missing.');
     return;
   }
 
-  // Register ScrollTrigger plugin
   gsap.registerPlugin(ScrollTrigger);
 
-  // ===================================
-  // HERO SECTION ANIMATIONS
-  // ===================================
-  
-  // Hero Badge Animation
-  gsap.from('.hero-badge', {
-    y: -50,
-    opacity: 0,
-    duration: 1,
-    delay: 0.3,
-    ease: 'power3.out'
+  // Configuración Global de Física "Glass"
+  gsap.defaults({
+    ease: 'expo.out', // Suave como el cristal
+    duration: 1.2
   });
 
-  // Hero Title Top Animation
-  gsap.from('.hero-title-top', {
-    x: -100,
-    opacity: 0,
-    duration: 1,
-    delay: 0.5,
-    ease: 'power3.out'
-  });
+  // ==========================================================================
+  // 2. HERO SECTION COREOGRAPHY (Timeline)
+  // ==========================================================================
+  // Usamos Timeline para sincronización perfecta sin 'delays' manuales
+  const initHero = () => {
+    const tl = gsap.timeline({ defaults: { opacity: 0, y: 30 } }); // Movimiento sutil (30px)
 
-  // Hero Title Main Animation
-  gsap.from('.hero-title-main', {
-    x: 100,
-    opacity: 0,
-    duration: 1,
-    delay: 0.7,
-    ease: 'power3.out'
-  });
-
-  // Hero Subtitle Animation
-  gsap.from('.hero-subtitle', {
-    y: 50,
-    opacity: 0,
-    duration: 1,
-    delay: 0.9,
-    ease: 'power3.out'
-  });
-
-  // Hero Buttons Animation
-  gsap.from('.hero-buttons', {
-    y: 50,
-    opacity: 0,
-    duration: 1,
-    delay: 1.1,
-    ease: 'power3.out'
-  });
-
-  // Hero Stats Animation
-  gsap.from('.hero-stats', {
-    y: 50,
-    opacity: 0,
-    duration: 1,
-    delay: 1.3,
-    ease: 'power3.out'
-  });
-
-  // Scroll Indicator Animation
-  gsap.from('.scroll-indicator', {
-    opacity: 0,
-    duration: 1,
-    delay: 1.5,
-    ease: 'power3.out'
-  });
-
-  // ===================================
-  // PARALLAX EFFECT FOR HERO
-  // ===================================
-  gsap.to('.hero-content', {
-    scrollTrigger: {
-      trigger: '.hero',
-      start: 'top top',
-      end: 'bottom top',
-      scrub: 1
-    },
-    y: 300,
-    opacity: 0,
-    ease: 'none'
-  });
-
-  // ===================================
-  // SECTION HEADERS ANIMATION
-  // ===================================
-  gsap.utils.toArray('.section-header').forEach(header => {
-    gsap.from(header, {
-      scrollTrigger: {
-        trigger: header,
-        start: 'top 85%',
-        toggleActions: 'play none none reverse'
-      },
-      y: 60,
-      opacity: 0,
-      duration: 0.8,
-      ease: 'power3.out'
-    });
-  });
-// ===================================
-// SERVICE CARDS ANIMATION
-// ===================================
-gsap.from('.service-grid.active', {
-  scrollTrigger: {
-    trigger: '.services',
-    start: 'top 80%',
-    toggleActions: 'restart none restart reverse'
-  },
-  y: 100,
-  opacity: 0,
-  duration: 0.8,
-  stagger: 0.2,
-  ease: 'power3.out'
-});
-
-  // ===================================
-  // ABOUT SECTION ANIMATIONS
-  // ===================================
-  
-  // About Content Animation
-  gsap.from('.about-content', {
-    scrollTrigger: {
-      trigger: '.about',
-      start: 'top 70%',
-      toggleActions: 'restart none restart reverse'
-    },
-    x: -100,
-    opacity: 0,
-    duration: 1,
-    ease: 'power3.out'
-  });
-
-  // About Images Animation
-  gsap.from('.about-images', {
-    scrollTrigger: {
-      trigger: '.about',
-      start: 'top 70%',
-      toggleActions: 'restart none restart reverse'
-    },
-    x: 100,
-    opacity: 0,
-    duration: 1,
-    ease: 'power3.out'
-  });
-
-  // About Features Animation
-  gsap.from('.about-feature', {
-    scrollTrigger: {
-      trigger: '.about-features',
-      start: 'top 80%',
-      toggleActions: 'restart none restart reverse'
-    },
-    y: 50,
-    opacity: 0,
-    duration: 0.6,
-    stagger: 0.2,
-    ease: 'power3.out'
-  });
-
-  // About Badge Animation
-  gsap.from('.about-badge', {
-    scrollTrigger: {
-      trigger: '.about-badge',
-      start: 'top 90%',
-      toggleActions: 'restart none restart reverse'
-    },
-    scale: 0,
-    opacity: 0,
-    rotation: -180,
-    duration: 0.8,
-    ease: 'back.out(1.7)'
-  });
-
-  // ===================================
-  // GALLERY ANIMATION
-  // ===================================
-  gsap.from('.gallery-item', {
-    scrollTrigger: {
-      trigger: '.gallery',
-      start: 'top 70%',
-      toggleActions: 'restart none restart reverse'
-    },
-    scale: 0.8,
-    opacity: 0,
-    duration: 0.6,
-    stagger: 0.15,
-    ease: 'power3.out'
-  });
-
-  // ===================================
-  // CONTACT SECTION ANIMATIONS
-  // ===================================
-  
-  // Contact Info Animation
-  gsap.from('.contact-info', {
-    scrollTrigger: {
-      trigger: '.contact',
-      start: 'top 70%',
-      toggleActions: 'restart none restart reverse'
-    },
-    x: -80,
-    opacity: 0,
-    duration: 0.8,
-    ease: 'power3.out'
-  });
-
-  // Contact Form Animation
-  gsap.from('.contact-form', {
-    scrollTrigger: {
-      trigger: '.contact',
-      start: 'top 70%',
-      toggleActions: 'restart none restart reverse'
-    },
-    x: 80,
-    opacity: 0,
-    duration: 0.8,
-    ease: 'power3.out'
-  });
-
-  // Contact Cards Stagger Animation
-  gsap.from('.contact-card', {
-    scrollTrigger: {
-      trigger: '.contact-info',
-      start: 'top 80%',
-      toggleActions: 'restart none restart reverse'
-    },
-    y: 40,
-    opacity: 0,
-    duration: 0.6,
-    stagger: 0.15,
-    ease: 'power3.out'
-  });
-
-  // Form Groups Animation
-  gsap.from('.form-group', {
-    scrollTrigger: {
-      trigger: '.contact-form',
-      start: 'top 80%',
-      toggleActions: 'restart none restart reverse'
-    },
-    y: 30,
-    opacity: 0,
-    duration: 0.5,
-    stagger: 0.1,
-    ease: 'power3.out'
-  });
-
-  // ===================================
-  // FOOTER ANIMATION
-  // ===================================
-  gsap.from('.footer-content > *', {
-    scrollTrigger: {
-      trigger: '.footer',
-      start: 'top 90%',
-      toggleActions: 'restart none restart reverse'
-    },
-    y: 50,
-    opacity: 0,
-    duration: 0.6,
-    stagger: 0.15,
-    ease: 'power3.out'
-  });
-
-  // ===================================
-  // FLOATING ANIMATION FOR SERVICE ICONS
-  // ===================================
-  gsap.to('.service-icon', {
-    y: -15,
-    duration: 2,
-    ease: 'power1.inOut',
-    repeat: -1,
-    yoyo: true,
-    stagger: {
-      each: 0.3,
-      from: 'random'
-    }
-  });
-
-  // ===================================
-  // SCROLL LINE ANIMATION
-  // ===================================
-  gsap.to('.scroll-line', {
-    scaleY: 0,
-    duration: 1.5,
-    ease: 'power1.inOut',
-    repeat: -1,
-    transformOrigin: 'top center'
-  });
-
-  // ===================================
-  // MOUSE PARALLAX EFFECT ON HERO
-  // ===================================
-  const hero = document.querySelector('.hero-content');
-  
-  if (hero) {
-    document.addEventListener('mousemove', (e) => {
-      const mouseX = e.clientX / window.innerWidth - 0.5;
-      const mouseY = e.clientY / window.innerHeight - 0.5;
-      
-      gsap.to(hero, {
-        x: mouseX * 20,
-        y: mouseY * 20,
-        duration: 0.5,
-        ease: 'power2.out'
-      });
-    });
-  }
-
-  // ===================================
-  // IMAGE REVEAL ANIMATION
-  // ===================================
-  gsap.utils.toArray('.about-image-main, .about-image-secondary').forEach(img => {
-    gsap.from(img, {
-      scrollTrigger: {
-        trigger: img,
-        start: 'top 85%',
-        toggleActions: 'restart none restart reverse'
-      },
-      clipPath: 'inset(0 100% 0 0)',
-      duration: 1.2,
-      ease: 'power3.out'
-    });
-  });
-
-  // ===================================
-  // TEXT REVEAL ANIMATION
-  // ===================================
-  gsap.utils.toArray('.section-title').forEach(title => {
-    const words = title.textContent.split(' ');
-    title.innerHTML = words.map(word => `<span class="word">${word}</span>`).join(' ');
-    
-    gsap.from(title.querySelectorAll('.word'), {
-      scrollTrigger: {
-        trigger: title,
-        start: 'top 85%',
-        toggleActions: 'restart none restart reverse'
-      },
-      y: 50,
-      opacity: 0,
-      duration: 0.6,
-      stagger: 0.1,
-      ease: 'power3.out'
-    });
-  });
-
-  // ===================================
-  // SCROLL PROGRESS BAR (OPTIONAL)
-  // ===================================
-  const progressBar = document.createElement('div');
-  progressBar.className = 'scroll-progress';
-  progressBar.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #10b981, #3b82f6);
-    z-index: 9999;
-    transition: width 0.1s ease;
-  `;
-  document.body.appendChild(progressBar);
-
-  gsap.to('.scroll-progress', {
-    scrollTrigger: {
-      trigger: 'body',
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 0.3,
-      onUpdate: (self) => {
-        progressBar.style.width = `${self.progress * 100}%`;
-      }
-    }
-  });
-
-  // ===================================
-  // INTERSECTION OBSERVER FOR FADE-IN
-  // ===================================
-  const fadeElements = document.querySelectorAll('.fade-in-element');
-  
-  const fadeObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        gsap.to(entry.target, {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: 'power3.out'
-        });
-        fadeObserver.unobserve(entry.target);
-      }
-    });
-  }, {
-    threshold: 0.1
-  });
-
-  fadeElements.forEach(el => {
-    gsap.set(el, { opacity: 0, y: 50 });
-    fadeObserver.observe(el);
-  });
-
-  // ===================================
-  // CUSTOM CURSOR EFFECT (OPTIONAL)
-  // ===================================
-  const cursor = document.createElement('div');
-  cursor.className = 'custom-cursor';
-  cursor.style.cssText = `
-    position: fixed;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #10b981;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transition: transform 0.2s ease;
-    display: none;
-  `;
-  document.body.appendChild(cursor);
-
-  document.addEventListener('mousemove', (e) => {
-    gsap.to(cursor, {
-      x: e.clientX - 10,
-      y: e.clientY - 10,
-      duration: 0.3,
-      ease: 'power2.out'
-    });
-  });
-
-  // Show cursor on desktop only
-  if (window.innerWidth > 768) {
-    cursor.style.display = 'block';
-  }
-
-  // Scale cursor on hover over interactive elements
-  const hoverElements = document.querySelectorAll('a, button, .service-card, .gallery-item');
-  
-  hoverElements.forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      gsap.to(cursor, {
-        scale: 1.5,
-        duration: 0.3,
-        ease: 'power2.out'
-      });
-    });
-    
-    el.addEventListener('mouseleave', () => {
-      gsap.to(cursor, {
-        scale: 1,
-        duration: 0.3,
-        ease: 'power2.out'
-      });
-    });
-  });
-
-  // ===================================
-  // SMOOTH SCROLL WITH GSAP
-  // ===================================
-  /*
-  // Uncomment if you want GSAP smooth scroll instead of CSS
-  gsap.registerPlugin(ScrollSmoother);
-  
-  ScrollSmoother.create({
-    smooth: 1,
-    effects: true,
-    smoothTouch: 0.1
-  });
-  */
-
-  // ===================================
-  // REFRESH SCROLLTRIGGER ON RESIZE
-  // ===================================
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 250);
-  });
-
-  // ===================================
-  // KILL ANIMATIONS ON MOBILE (PERFORMANCE)
-  // ===================================
-  if (window.innerWidth < 768) {
-    // Disable heavy animations on mobile
-    gsap.globalTimeline.timeScale(2); // Speed up animations
-  }
-
-  // ===================================
-  // CONSOLE LOG
-  // ===================================
-  console.log('%c GSAP Animations Loaded ', 'background: #10b981; color: white; padding: 5px 10px; font-size: 12px;');
-
-}); // End DOMContentLoaded
-
-// ===================================
-// UTILITY: Create Stagger Animation
-// ===================================
-function createStaggerAnimation(selector, triggerSelector, options = {}) {
-  const defaults = {
-    y: 50,
-    opacity: 0,
-    duration: 0.6,
-    stagger: 0.15,
-    ease: 'power3.out',
-    start: 'top 80%'
+    tl.addLabel('start')
+      .from('.hero-badge', { scale: 0.8, duration: 1 }, 'start')
+      .from('.hero-title-top', { x: -20, duration: 1.4 }, 'start+=0.2')
+      .from('.hero-title-main', { 
+        y: 50, 
+        scale: 0.95, 
+        duration: 1.5,
+        clearProps: 'all' // Limpiar para evitar conflictos con hover CSS
+      }, 'start+=0.3')
+      .from('.hero-subtitle', { duration: 1 }, '-=1')
+      .from('.hero-buttons', { y: 20, duration: 1 }, '-=0.8')
+      .from('.hero-stats', { y: 40, stagger: 0.1 }, '-=0.8')
+      .from('.scroll-indicator', { opacity: 0, y: -10, duration: 2, repeat: -1, yoyo: true }, '+=0.5');
   };
 
-  const settings = { ...defaults, ...options };
+  // ==========================================================================
+  // 3. RESPONSIVE LOGIC (MatchMedia)
+  // ==========================================================================
+  ScrollTrigger.matchMedia({
+    
+    // A. Desktop Animations Only (Mouse intensive)
+    "(min-width: 992px)": function() {
+      
+      // --- Mouse Parallax (High Performance quickTo) ---
+      const heroContent = document.querySelector('.hero-content');
+      if (heroContent) {
+        const xTo = gsap.quickTo(heroContent, "x", { duration: 0.8, ease: "power3" });
+        const yTo = gsap.quickTo(heroContent, "y", { duration: 0.8, ease: "power3" });
 
-  gsap.from(selector, {
-    scrollTrigger: {
-      trigger: triggerSelector,
-      start: settings.start,
-      toggleActions: 'restart none restart reverse'
+        window.addEventListener("mousemove", (e) => {
+          const xPos = (e.clientX / window.innerWidth - 0.5) * 30; // 30px range
+          const yPos = (e.clientY / window.innerHeight - 0.5) * 30;
+          xTo(xPos);
+          yTo(yPos);
+        });
+      }
+
+      // --- Custom Cursor "Liquid" Effect ---
+      const cursor = document.createElement('div');
+      cursor.className = 'custom-cursor';
+      // Estilos críticos inyectados por JS para asegurar funcionamiento
+      Object.assign(cursor.style, {
+        position: 'fixed', top: 0, left: 0, width: '20px', height: '20px',
+        border: '1.5px solid #7FFFD4', borderRadius: '50%', pointerEvents: 'none',
+        zIndex: 9999, transform: 'translate(-50%, -50%)', mixBlendMode: 'difference'
+      });
+      document.body.appendChild(cursor);
+
+      const cursorX = gsap.quickTo(cursor, "x", { duration: 0.15, ease: "power2.out" });
+      const cursorY = gsap.quickTo(cursor, "y", { duration: 0.15, ease: "power2.out" });
+
+      window.addEventListener("mousemove", (e) => {
+        cursorX(e.clientX);
+        cursorY(e.clientY);
+      });
+
+      // Cursor Magnetism/Scaling on Hover
+      const interactives = document.querySelectorAll('a, button, .service-card, .gallery-item');
+      interactives.forEach(el => {
+        el.addEventListener('mouseenter', () => gsap.to(cursor, { scale: 3, backgroundColor: 'rgba(127, 255, 212, 0.1)', duration: 0.3 }));
+        el.addEventListener('mouseleave', () => gsap.to(cursor, { scale: 1, backgroundColor: 'transparent', duration: 0.3 }));
+      });
     },
-    y: settings.y,
-    opacity: settings.opacity,
-    duration: settings.duration,
-    stagger: settings.stagger,
-    ease: settings.ease
-  });
-}
 
-// ===================================
-// UTILITY: Create Parallax Animation
-// ===================================
-function createParallax(selector, speed = 0.5) {
-  gsap.to(selector, {
-    scrollTrigger: {
-      trigger: selector,
-      start: 'top bottom',
-      end: 'bottom top',
-      scrub: true
-    },
-    y: (i, target) => -target.offsetHeight * speed,
-    ease: 'none'
-  });
-}
+    // B. All Devices (ScrollTriggers)
+    "all": function() {
+      initHero();
 
-// ===================================
-// EXPORT FUNCTIONS (IF USING MODULES)
-// ===================================
-// export { createStaggerAnimation, createParallax };
+      // --- Efficient Batching for Grids (Services & Gallery) ---
+      // "Batch" es mucho más eficiente que crear un trigger por cada tarjeta
+      ScrollTrigger.batch(".service-card, .gallery-item", {
+        interval: 0.1, // Delay entre elementos del lote
+        batchMax: 3,   // Máximo elementos por lote
+        onEnter: batch => gsap.to(batch, {
+          opacity: 1, 
+          y: 0, 
+          stagger: 0.15, 
+          overwrite: true,
+          duration: 1
+        }),
+        onLeaveBack: batch => gsap.set(batch, { opacity: 0, y: 50 }) // Reset sutil al volver arriba
+      });
+
+      // Setup inicial para batch (ocultarlos antes de animar)
+      gsap.set(".service-card, .gallery-item", { opacity: 0, y: 50 });
+
+      // --- Section Headers ---
+      gsap.utils.toArray('.section-header').forEach(header => {
+        gsap.from(header, {
+          scrollTrigger: {
+            trigger: header,
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          },
+          y: 40,
+          opacity: 0,
+          duration: 1
+        });
+      });
+
+      // --- Text Reveal (Word by Word) ---
+      // Solo aplicamos si el navegador soporta Intl.Segmenter para no romper palabras complejas, o split simple
+      const titles = document.querySelectorAll('.section-title');
+      titles.forEach(title => {
+        // Simple split por espacios
+        const text = title.innerText;
+        title.innerHTML = text.split(' ').map(t => `<span style="display:inline-block">${t}</span>`).join(' ');
+        
+        gsap.from(title.children, {
+          scrollTrigger: {
+            trigger: title,
+            start: "top 90%"
+          },
+          y: 20,
+          opacity: 0,
+          stagger: 0.1,
+          duration: 0.8,
+          ease: "back.out(1.7)"
+        });
+      });
+
+      // --- About Section (Composition) ---
+      const aboutTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".about-grid",
+          start: "top 75%"
+        }
+      });
+      
+      aboutTl.from(".about-image-main", { x: -50, opacity: 0, duration: 1.2 })
+             .from(".about-image-secondary", { y: 50, opacity: 0, duration: 1.2 }, "<0.2") // Overlap
+             .from(".about-content > *", { x: 30, opacity: 0, stagger: 0.1 }, "<");
+
+      // --- Contact Form ---
+      gsap.from(".contact-card", {
+        scrollTrigger: { trigger: ".contact", start: "top 80%" },
+        scale: 0.9,
+        opacity: 0,
+        duration: 1,
+        ease: "elastic.out(1, 0.75)"
+      });
+    }
+  });
+
+  // ==========================================================================
+  // 4. FLOATING ELEMENTS (Continuous Ambient Motion)
+  // ==========================================================================
+  // Efecto de flotación perpetua para iconos
+  gsap.to(".service-icon", {
+    y: -10,
+    duration: 2.5,
+    repeat: -1,
+    yoyo: true,
+    ease: "sine.inOut",
+    stagger: {
+      each: 0.2,
+      from: "random"
+    }
+  });
+
+  console.log('%c ASLA GROUP %c Liquid Glass Physics Active ', 'background:#0a7a4a; color:white; padding: 4px; border-radius: 4px 0 0 4px;', 'background:#111; color:#fff; padding: 4px; border-radius: 0 4px 4px 0;');
+});

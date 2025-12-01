@@ -1,437 +1,331 @@
 /* ===================================
-   ASLA GROUP - THREE.JS 3D SCENE
-   Author: Cristian Quispe Lucas
-   Description: 3D elements and animations
+   ASLA GROUP - THREE.JS 3D SCENE (OPTIMIZED CORE)
+   Author: Cristian Quispe Lucas (Optimized by AI)
+   Description: High-performance 3D elements with visibility culling
    =================================== */
 
-// Wait for Three.js to load
-window.addEventListener('load', () => {
-  if (typeof THREE === 'undefined') {
-    console.warn('Three.js not loaded. 3D features will not work.');
-    return;
+(function() {
+  // Configuración Global de Rendimiento
+  const CONFIG = {
+    // Limitar pixel ratio a 2 ahorra mucha batería en móviles de alta gama
+    pixelRatio: Math.min(window.devicePixelRatio, 2),
+    // Pausar renderizado si no está en pantalla
+    useVisibilityCulling: true
+  };
+
+  /**
+   * Helper para configuración común de escenas
+   * Evita duplicar código y maneja el redimensionamiento y limpieza
+   */
+  function initScene(containerId, cameraZ = 5) {
+    const container = document.getElementById(containerId);
+    if (!container) return null;
+
+    // 1. Scene & Camera
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      container.offsetWidth / container.offsetHeight,
+      0.1,
+      1000
+    );
+    camera.position.z = cameraZ;
+
+    // 2. Renderer Optimizado
+    const renderer = new THREE.WebGLRenderer({ 
+      alpha: true, 
+      antialias: CONFIG.pixelRatio < 2, // Desactivar antialias en pantallas de alta densidad para rendimiento
+      powerPreference: "high-performance"
+    });
+    renderer.setSize(container.offsetWidth, container.offsetHeight);
+    renderer.setPixelRatio(CONFIG.pixelRatio);
+    container.appendChild(renderer.domElement);
+
+    // 3. Manejo inteligente de resize (ResizeObserver es más eficiente que window.resize)
+    const resizeObserver = new ResizeObserver(() => {
+      if (!container) return;
+      const width = container.offsetWidth;
+      const height = container.offsetHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    });
+    resizeObserver.observe(container);
+
+    // 4. Sistema de Pausa/Play según visibilidad
+    let isVisible = true;
+    if (CONFIG.useVisibilityCulling && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        isVisible = entries[0].isIntersecting;
+      });
+      observer.observe(renderer.domElement);
+    }
+
+    return { scene, camera, renderer, container, isVisible: () => isVisible };
   }
 
   // ===================================
   // OPTION 1: 3D ROTATING PLANT POT
   // ===================================
-  function create3DPlantPot(containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
+  window.create3DPlantPot = function(containerId) {
+    const setup = initScene(containerId, 5);
+    if (!setup) return;
+    const { scene, camera, renderer, isVisible } = setup;
 
-    // Scene setup
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      container.offsetWidth / container.offsetHeight,
-      0.1,
-      1000
-    );
-    camera.position.z = 5;
-
-    const renderer = new THREE.WebGLRenderer({ 
-      alpha: true, 
-      antialias: true 
-    });
-    renderer.setSize(container.offsetWidth, container.offsetHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    container.appendChild(renderer.domElement);
-
-    // Lighting
+    // Lighting (Shared for efficiency)
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(5, 5, 5);
+    scene.add(dirLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(5, 5, 5);
-    scene.add(directionalLight);
+    // Group to rotate everything together
+    const group = new THREE.Group();
+    scene.add(group);
 
-    // Create plant pot (cylinder for pot)
-    const potGeometry = new THREE.CylinderGeometry(1, 0.8, 1.5, 32);
-    const potMaterial = new THREE.MeshStandardMaterial({ 
-      color: 0x8b4513,
-      roughness: 0.7,
-      metalness: 0.2
+    // Optimization: Low poly counts where possible
+    const potGeo = new THREE.CylinderGeometry(1, 0.8, 1.5, 32);
+    const potMat = new THREE.MeshStandardMaterial({ 
+      color: 0x8b4513, roughness: 0.7, metalness: 0.2 
     });
-    const pot = new THREE.Mesh(potGeometry, potMaterial);
+    const pot = new THREE.Mesh(potGeo, potMat);
     pot.position.y = -0.5;
-    scene.add(pot);
+    group.add(pot);
 
-    // Create plant (multiple spheres for leaves)
-    const leafMaterial = new THREE.MeshStandardMaterial({ 
-      color: 0x10b981,
-      roughness: 0.5
-    });
-
+    // Leaves
+    const leafGeo = new THREE.SphereGeometry(0.3, 16, 16); // Reutilizamos geometría
+    const leafMat = new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.5 });
+    
     const leaves = [];
     for (let i = 0; i < 8; i++) {
-      const leafGeometry = new THREE.SphereGeometry(0.3, 16, 16);
-      const leaf = new THREE.Mesh(leafGeometry, leafMaterial);
-      
+      const leaf = new THREE.Mesh(leafGeo, leafMat);
       const angle = (i / 8) * Math.PI * 2;
-      leaf.position.x = Math.cos(angle) * 0.8;
-      leaf.position.y = Math.sin(angle) * 0.5 + 0.5;
-      leaf.position.z = Math.sin(angle) * 0.8;
-      
-      scene.add(leaf);
+      leaf.position.set(
+        Math.cos(angle) * 0.8,
+        Math.sin(angle) * 0.5 + 0.5,
+        Math.sin(angle) * 0.8
+      );
+      group.add(leaf);
       leaves.push(leaf);
     }
 
-    // Mouse interaction
-    let mouseX = 0;
-    let mouseY = 0;
-
-    container.addEventListener('mousemove', (e) => {
-      const rect = container.getBoundingClientRect();
-      mouseX = ((e.clientX - rect.left) / container.offsetWidth) * 2 - 1;
-      mouseY = -((e.clientY - rect.top) / container.offsetHeight) * 2 + 1;
+    // Mouse Interaction (Damped)
+    let targetX = 0, targetY = 0;
+    setup.container.addEventListener('mousemove', (e) => {
+      const rect = setup.container.getBoundingClientRect();
+      targetX = ((e.clientX - rect.left) / setup.container.offsetWidth) * 2 - 1;
+      targetY = -((e.clientY - rect.top) / setup.container.offsetHeight) * 2 + 1;
     });
 
-    // Animation loop
+    // Loop
     function animate() {
       requestAnimationFrame(animate);
+      if (!isVisible()) return; // PAUSA INTELIGENTE
 
-      // Rotate pot
-      pot.rotation.y += 0.01;
-
-      // Animate leaves
+      group.rotation.y += 0.005;
+      
+      // Gentle leaf movement
+      const time = Date.now() * 0.001;
       leaves.forEach((leaf, i) => {
-        leaf.position.y += Math.sin(Date.now() * 0.001 + i) * 0.002;
-        leaf.rotation.z += 0.01;
+        leaf.position.y += Math.sin(time + i) * 0.002;
       });
 
-      // Camera follow mouse
-      camera.position.x += (mouseX * 2 - camera.position.x) * 0.05;
-      camera.position.y += (mouseY * 2 - camera.position.y) * 0.05;
+      // Smooth camera follow
+      camera.position.x += (targetX * 2 - camera.position.x) * 0.05;
+      camera.position.y += (targetY * 2 - camera.position.y) * 0.05;
       camera.lookAt(scene.position);
 
       renderer.render(scene, camera);
     }
-
     animate();
-
-    // Handle resize
-    window.addEventListener('resize', () => {
-      camera.aspect = container.offsetWidth / container.offsetHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(container.offsetWidth, container.offsetHeight);
-    });
-
-    return { scene, camera, renderer };
-  }
+  };
 
   // ===================================
-  // OPTION 2: 3D FLOATING LEAVES
+  // OPTION 2: 3D FLOATING LEAVES (Optimized Geometry)
   // ===================================
-  function create3DFloatingLeaves(containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
+  window.create3DFloatingLeaves = function(containerId) {
+    const setup = initScene(containerId, 10);
+    if (!setup) return;
+    const { scene, camera, renderer, isVisible } = setup;
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      container.offsetWidth / container.offsetHeight,
-      0.1,
-      1000
-    );
-    camera.position.z = 10;
-
-    const renderer = new THREE.WebGLRenderer({ 
-      alpha: true, 
-      antialias: true 
-    });
-    renderer.setSize(container.offsetWidth, container.offsetHeight);
-    container.appendChild(renderer.domElement);
-
-    // Lighting
-    const light = new THREE.PointLight(0xffffff, 1, 100);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
+    const light = new THREE.PointLight(0xffffff, 1, 50);
     light.position.set(0, 0, 10);
     scene.add(light);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambientLight);
-
-    // Create leaves
+    // CRITICAL OPTIMIZATION: Create Geometry ONCE, reuse 50 times
+    const geometry = new THREE.PlaneGeometry(0.5, 1);
     const leaves = [];
-    const leafGeometry = new THREE.PlaneGeometry(0.5, 1);
-    
-    for (let i = 0; i < 50; i++) {
-      const leafMaterial = new THREE.MeshStandardMaterial({
-        color: new THREE.Color().setHSL(0.3, 0.7, Math.random() * 0.3 + 0.4),
+    const count = 40; // Reduced slightly for mobile performance
+
+    for (let i = 0; i < count; i++) {
+      const material = new THREE.MeshStandardMaterial({
+        color: new THREE.Color().setHSL(0.35, 0.8, Math.random() * 0.4 + 0.3),
         side: THREE.DoubleSide,
         transparent: true,
         opacity: 0.8
       });
 
-      const leaf = new THREE.Mesh(leafGeometry, leafMaterial);
+      const leaf = new THREE.Mesh(geometry, material);
       
-      leaf.position.x = (Math.random() - 0.5) * 20;
-      leaf.position.y = (Math.random() - 0.5) * 20;
-      leaf.position.z = (Math.random() - 0.5) * 20;
+      // Random spread
+      leaf.position.set(
+        (Math.random() - 0.5) * 15,
+        (Math.random() - 0.5) * 15,
+        (Math.random() - 0.5) * 10
+      );
       
-      leaf.rotation.x = Math.random() * Math.PI;
-      leaf.rotation.y = Math.random() * Math.PI;
-      
+      leaf.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+
+      // Store physics data in user data
       leaf.userData = {
-        speedX: (Math.random() - 0.5) * 0.02,
-        speedY: (Math.random() - 0.5) * 0.02,
-        speedZ: (Math.random() - 0.5) * 0.02,
-        rotationSpeed: (Math.random() - 0.5) * 0.05
+        speed: Math.random() * 0.02 + 0.005,
+        rotSpeed: Math.random() * 0.02 + 0.005,
+        yBase: leaf.position.y
       };
       
       scene.add(leaf);
       leaves.push(leaf);
     }
 
-    // Animation
     function animate() {
       requestAnimationFrame(animate);
+      if (!isVisible()) return;
 
       leaves.forEach(leaf => {
-        leaf.position.x += leaf.userData.speedX;
-        leaf.position.y += leaf.userData.speedY;
-        leaf.position.z += leaf.userData.speedZ;
-        
-        leaf.rotation.x += leaf.userData.rotationSpeed;
-        leaf.rotation.y += leaf.userData.rotationSpeed;
+        // Organic floating movement
+        leaf.position.y += leaf.userData.speed;
+        leaf.rotation.x += leaf.userData.rotSpeed;
+        leaf.rotation.y += leaf.userData.rotSpeed;
 
-        // Wrap around
-        if (leaf.position.x > 10) leaf.position.x = -10;
-        if (leaf.position.x < -10) leaf.position.x = 10;
-        if (leaf.position.y > 10) leaf.position.y = -10;
-        if (leaf.position.y < -10) leaf.position.y = 10;
-        if (leaf.position.z > 10) leaf.position.z = -10;
-        if (leaf.position.z < -10) leaf.position.z = 10;
+        // Reset if goes too high
+        if (leaf.position.y > 8) {
+          leaf.position.y = -8;
+          leaf.position.x = (Math.random() - 0.5) * 15;
+        }
       });
 
       renderer.render(scene, camera);
     }
-
     animate();
-
-    // Handle resize
-    window.addEventListener('resize', () => {
-      camera.aspect = container.offsetWidth / container.offsetHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(container.offsetWidth, container.offsetHeight);
-    });
-  }
+  };
 
   // ===================================
-  // OPTION 3: 3D TEXT LOGO
+  // OPTION 3: 3D TEXT (Optimized Fallback)
   // ===================================
-  function create3DTextLogo(containerId, text = 'ASLA') {
-    const container = document.getElementById(containerId);
-    if (!container) return;
+  window.create3DTextLogo = function(containerId, text = 'ASLA') {
+    const setup = initScene(containerId, 6);
+    if (!setup) return;
+    const { scene, camera, renderer, isVisible } = setup;
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      container.offsetWidth / container.offsetHeight,
-      0.1,
-      1000
-    );
-    camera.position.z = 5;
-
-    const renderer = new THREE.WebGLRenderer({ 
-      alpha: true, 
-      antialias: true 
-    });
-    renderer.setSize(container.offsetWidth, container.offsetHeight);
-    container.appendChild(renderer.domElement);
-
-    // Lighting
     const pointLight = new THREE.PointLight(0xffffff, 1);
-    pointLight.position.set(5, 5, 5);
+    pointLight.position.set(5, 5, 10);
     scene.add(pointLight);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambientLight);
-
-    // Load font and create 3D text
-    const loader = new THREE.FontLoader();
-    
-    // Create simple 3D boxes as letters (fallback if font doesn't load)
-    const createTextBoxes = () => {
-      const geometry = new THREE.BoxGeometry(1, 1.5, 0.5);
-      const material = new THREE.MeshStandardMaterial({
-        color: 0x10b981,
-        metalness: 0.5,
-        roughness: 0.2
-      });
-
-      const letters = text.split('');
-      const meshes = [];
-
-      letters.forEach((letter, index) => {
-        const mesh = new THREE.Mesh(geometry, material.clone());
-        mesh.position.x = (index - letters.length / 2) * 1.5;
-        scene.add(mesh);
-        meshes.push(mesh);
-      });
-
-      return meshes;
-    };
-
-    const textMeshes = createTextBoxes();
-
-    // Animation
-    function animate() {
-      requestAnimationFrame(animate);
-
-      textMeshes.forEach((mesh, index) => {
-        mesh.rotation.y += 0.01;
-        mesh.position.y = Math.sin(Date.now() * 0.001 + index) * 0.2;
-      });
-
-      renderer.render(scene, camera);
-    }
-
-    animate();
-
-    // Handle resize
-    window.addEventListener('resize', () => {
-      camera.aspect = container.offsetWidth / container.offsetHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(container.offsetWidth, container.offsetHeight);
-    });
-  }
-
-  // ===================================
-  // OPTION 4: 3D PARTICLES SPHERE
-  // ===================================
-  function create3DParticlesSphere(containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      container.offsetWidth / container.offsetHeight,
-      0.1,
-      1000
-    );
-    camera.position.z = 15;
-
-    const renderer = new THREE.WebGLRenderer({ 
-      alpha: true, 
-      antialias: true 
-    });
-    renderer.setSize(container.offsetWidth, container.offsetHeight);
-    container.appendChild(renderer.domElement);
-
-    // Create particles
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 5000;
-    const posArray = new Float32Array(particlesCount * 3);
-
-    for (let i = 0; i < particlesCount * 3; i++) {
-      posArray[i] = (Math.random() - 0.5) * 20;
-    }
-
-    particlesGeometry.setAttribute('position', 
-      new THREE.BufferAttribute(posArray, 3)
-    );
-
-    const particlesMaterial = new THREE.PointsMaterial({
-      size: 0.05,
+    // Simple geometric letters (Performant & Modern)
+    const geometry = new THREE.BoxGeometry(1, 1.5, 0.2);
+    const material = new THREE.MeshStandardMaterial({
       color: 0x10b981,
-      transparent: true,
-      opacity: 0.8
+      metalness: 0.8,
+      roughness: 0.2,
+      emissive: 0x0a7a4a,
+      emissiveIntensity: 0.2
     });
 
-    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particlesMesh);
+    const group = new THREE.Group();
+    const letters = text.split('');
+    const meshes = [];
 
-    // Mouse interaction
-    let mouseX = 0;
-    let mouseY = 0;
-
-    document.addEventListener('mousemove', (e) => {
-      mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-      mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+    letters.forEach((letter, index) => {
+      // Reusing geometry and material
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.x = (index - (letters.length - 1) / 2) * 1.4;
+      group.add(mesh);
+      meshes.push(mesh);
     });
 
-    // Animation
-    const clock = new THREE.Clock();
+    scene.add(group);
 
     function animate() {
       requestAnimationFrame(animate);
+      if (!isVisible()) return;
 
-      const elapsedTime = clock.getElapsedTime();
-
-      particlesMesh.rotation.y = elapsedTime * 0.05;
-      particlesMesh.rotation.x = mouseY * 0.5;
-      particlesMesh.rotation.y = mouseX * 0.5;
+      const time = Date.now() * 0.002;
+      
+      // Wave animation
+      meshes.forEach((mesh, i) => {
+        mesh.position.y = Math.sin(time + i * 0.5) * 0.3;
+        mesh.rotation.y = Math.sin(time * 0.5 + i * 0.2) * 0.3;
+      });
+      
+      // Gentle global float
+      group.rotation.x = Math.sin(time * 0.2) * 0.1;
 
       renderer.render(scene, camera);
     }
-
     animate();
+  };
 
-    // Handle resize
-    window.addEventListener('resize', () => {
-      camera.aspect = container.offsetWidth / container.offsetHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(container.offsetWidth, container.offsetHeight);
+  // ===================================
+  // OPTION 4: 3D PARTICLES (BufferGeometry Optimized)
+  // ===================================
+  window.create3DParticlesSphere = function(containerId) {
+    const setup = initScene(containerId, 12);
+    if (!setup) return;
+    const { scene, camera, renderer, isVisible, container } = setup;
+
+    // BufferGeometry is crucial for particle performance
+    const geometry = new THREE.BufferGeometry();
+    const count = window.innerWidth < 768 ? 2000 : 4000; // Menos partículas en móvil
+    const posArray = new Float32Array(count * 3);
+
+    for (let i = 0; i < count * 3; i++) {
+      posArray[i] = (Math.random() - 0.5) * 25;
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+    const material = new THREE.PointsMaterial({
+      size: 0.08,
+      color: 0x7FFFD4, // Aquamarine accent
+      transparent: true,
+      opacity: 0.6,
+      blending: THREE.AdditiveBlending
     });
-  }
 
-  // ===================================
-  // INITIALIZE 3D SCENES
-  // ===================================
-  
-  // Uncomment the ones you want to use:
-  
-  // create3DPlantPot('plant-3d-container');
-  // create3DFloatingLeaves('leaves-3d-container');
-  // create3DTextLogo('logo-3d-container', 'ASLA');
-  // create3DParticlesSphere('particles-3d-container');
+    const particles = new THREE.Points(geometry, material);
+    scene.add(particles);
 
-  console.log('%c Three.js 3D Loaded ', 'background: #10b981; color: white; padding: 5px 10px;');
-});
+    let mouseX = 0, mouseY = 0;
+    if (!('ontouchstart' in window)) { // Only track mouse on desktop
+      document.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+      });
+    }
 
-// ===================================
-// UTILITY: Create 3D Background
-// ===================================
-function create3DBackground() {
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  );
-  camera.position.z = 5;
+    function animate() {
+      requestAnimationFrame(animate);
+      if (!isVisible()) return;
 
-  const renderer = new THREE.WebGLRenderer({ 
-    alpha: true,
-    canvas: document.querySelector('#bg-3d')
+      particles.rotation.y += 0.001;
+      particles.rotation.x += mouseY * 0.02;
+      particles.rotation.y += mouseX * 0.02;
+
+      renderer.render(scene, camera);
+    }
+    animate();
+  };
+
+  // Init logic on load
+  window.addEventListener('load', () => {
+    if (typeof THREE !== 'undefined') {
+      console.log('✅ Three.js Optimized Core Loaded');
+    } else {
+      console.warn('⚠️ Three.js missing');
+    }
   });
-  renderer.setSize(window.innerWidth, window.innerHeight);
 
-  // Create geometry
-  const geometry = new THREE.IcosahedronGeometry(1, 0);
-  const material = new THREE.MeshStandardMaterial({
-    color: 0x10b981,
-    wireframe: true
-  });
-  const mesh = new THREE.Mesh(geometry, material);
-  scene.add(mesh);
-
-  // Lighting
-  const light = new THREE.PointLight(0xffffff, 1);
-  light.position.set(5, 5, 5);
-  scene.add(light);
-
-  // Animation
-  function animate() {
-    requestAnimationFrame(animate);
-    mesh.rotation.x += 0.01;
-    mesh.rotation.y += 0.01;
-    renderer.render(scene, camera);
-  }
-
-  animate();
-}
-
-// Export functions if using modules
-// export { create3DPlantPot, create3DFloatingLeaves, create3DTextLogo, create3DParticlesSphere };
+})();
